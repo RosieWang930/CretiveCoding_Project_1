@@ -1,87 +1,140 @@
 //adjective: afraid
 
-ShakingBall alice;
+Ball alice;
 Knife mouseknife;
+Weapon weapon;
+float speed;
 
+
+color co;
+float xLoc;
+float yLoc;
+float m;
+int tile;
 void setup()
 {
-  size(800,800);
+  size(800, 800);
   background(219, 189, 172);
-
+  xLoc = 400;
+  yLoc = 800;
 }
 
 void draw()
 {
-  background(219, 189, 172);
+  frameRate(60);
+  alice = new Ball();
+  beginningscene();
+  if (xLoc==0 && yLoc<=360 && yLoc >=200) {
+    manual();
+    xLoc=0;
+    yLoc=250;
+  }
+
+  if (xLoc==800 && yLoc<=360 && yLoc >=200) {
+    automation();
+    xLoc=800;
+    yLoc=250;
+  }
+  
+}
+
+
+void beginningscene() {
+  background(0);
+  locchange();
+  alice.drawball(xLoc, yLoc, 0, 0);
+  xLoc = constrain(xLoc, 0, 800);
+  yLoc = constrain(yLoc, 0, 800);
+
+  fill(255, 0, 0);
+  rect(0, 200, 50, 200);
+  fill(0, 255, 0);
+  rect(750, 200, 50, 200);
+
+  sandbackground();
+}
+
+void sandbackground() {
+  //background(0);
+  m = second()+1;
+  tile = 10;
+
+  if (m % 4 == 0) {
+    for (int i=1; i<=width/tile; i++) {
+      for (int m=1; m<=height/tile; m++) {
+        pushMatrix();
+        translate(10*i, 10*m);
+        stroke(100);
+        strokeWeight(4);
+        point(random(0, 8), random(0, 8));
+        popMatrix();
+      }
+    }
+  }
+}
+
+void manual() {
+  background(0);
+  //backgroundline();
   mouseknife = new Knife();
-  mouseknife.drawknife(mouseX,mouseY);
-  
-  alice = new ShakingBall();
-  alice.drawball(0,0);
-  alice.shaking(250,2);
-  alice.shaking(150,4);
-  alice.shaking(100,6);
-  alice.shaking(50,10);
-  
-    
-}
-  
+  mouseknife.display(0, 0);
 
 
-class ShakingBall
-{
-  int change;
-  color ballcolor = color(100,100,100);
-  ShakingBall()
-  {
+  alice.drawball(width/2, height/2, 0, 0);
+  if (key == '1'||key == '2') {
+    alice.shakingone(250, 4);
+    alice.shakingone(150, 6);
+    alice.shakingone(100, 10);
+    alice.shakingone(50, 13);
   }
   
-  void drawball(float n,float m)
-  {
-    fill(ballcolor);
-    noStroke();
-    ellipse(width/2+n,height/2+m,100,100);
-  }
-  
-  void shaking(int r,int level)
-  {
-    if(width/2-r<=mouseX && mouseX<=width/2 )
-  {
-    if(height/2-r<=mouseY && mouseY<=height/2)
-    alice.drawball(random(-level,level),random(-level,level));
-    if(height/2+r>=mouseY && mouseY>=height/2)
-    alice.drawball(random(-level,level),random(-level,level));
-  }
-  if(width/2+r>=mouseX && mouseX>=width/2)
-  {
-    if(height/2-r<=mouseY && mouseY<=height/2)
-    alice.drawball(random(-level,level),random(-level,level));
-    if(height/2+r>=mouseY && mouseY>=height/2)
-    alice.drawball(random(-level,level),random(-level,level));
-  }
-    changecolor();
-  }
-  
-  void changecolor()
-  {
-    change = constrain(mouseX-width/2,0,255);
-    ballcolor = color(255-abs(mouseX-width/2),100-abs(mouseX-width/2),100-abs(mouseX-width/2));
-    
-    
+  if(key == '3'){
+    background(0);
+    alice.moving();
   }
 }
 
-class Knife
-{
-   Knife(){
-   }
-   
-   void drawknife(float xLoc, float yLoc)
-   {
-     noStroke();
-     fill(255);
-     triangle(xLoc-5,yLoc,xLoc-5,yLoc-40,xLoc+10,yLoc);
-     fill(50);
-     rect(xLoc-5,yLoc,10,20);
-   }
+void automation() {
+  background(0);
+  weapon = new Weapon();
+  alice.drawball(width/2, height/2, 0, 0);
+ 
+  if(mousePressed == true){
+  background(255);
+  speed = random(0,40);
+  weapon.spike(speed);
+  frameRate(3);
+  if (speed >=30) {
+    frameRate(10);
+    alice.shakingtwo(speed, 13);
+  }
+  else if (speed >=20 && speed <30) {
+    frameRate(10);
+    alice.shakingtwo(speed, 8);
+  }
+  else if (speed >=10 && speed <20) {
+    frameRate(10);
+    alice.shakingtwo(speed, 4);
+  }
+  else if (speed >=0 && speed <10) {
+    frameRate(10);
+    alice.shakingtwo(speed, 2);
+  }
+    
+  } 
+}
+
+void locchange() {
+  if (keyCode == UP) {
+    yLoc -=2;
+  }
+  if (keyCode == DOWN) {
+    yLoc +=2;
+  }
+  if (keyCode == LEFT) {
+    xLoc -=2;
+  }
+  if (keyCode == RIGHT) {
+    xLoc +=2;
+  }
 }
