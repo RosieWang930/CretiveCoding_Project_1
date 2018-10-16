@@ -43,8 +43,14 @@ class Ball
     ballcolor=color(215+r, 40-r, 40-r);
   }
 
-
-
+  void redcolor(){
+    ballcolor = color(255,0,0);
+  }
+  
+  void origincolor(){
+    ballcolor = color(100,100,100);
+  }
+    
   void changecolor()
   {
     //change = constrain(mouseX-width/2,0,255);

@@ -44,9 +44,13 @@ void draw()
 void beginningscene() {
   background(0);
   locchange();
+  if(a>=29){
+    alice.redcolor();
+  }
   alice.drawball(xLoc, yLoc, 0, 0);
   xLoc = constrain(xLoc, 0, 800);
   yLoc = constrain(yLoc, 0, 800);
+  
   pushMatrix();
 
   if (keyCode == UP) {
@@ -81,7 +85,7 @@ void beginningscene() {
   }
   if (keyCode == RIGHT) {
     a=0;
-    a+=millis()/400;
+    a+=millis()/300;
     a = constrain(a,0,30);
     pushMatrix();
     translate(xLoc-80+a,yLoc);
@@ -124,8 +128,7 @@ void manual() {
   //backgroundline();
   mouseknife = new Knife();
   mouseknife.display(0, 0);
-
-
+  alice.origincolor();
   alice.drawball(width/2, height/2, 0, 0);
   if (key == '1'||key == '2') {
     alice.shakingone(250, 8);
